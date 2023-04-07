@@ -1,0 +1,61 @@
+    //BFS algorithm
+    
+    bool check(int start,vector<int> adj[],vector<int> &color){
+        queue<int>q;
+        q.push(start);
+        //mark starting color as 0
+        color[start] = 0;
+        
+        while(!q.empty()){
+            int node = q.front();q.pop();
+            
+            for(auto it: adj[node]){
+                //assign opp color, like if prev color was 0 make curr color as 1 and push to queue
+                if(color[it] == -1){
+                    color[it] = !color[node];
+                    q.push(it);
+                }
+                //if adjacent color had same color then someone did color it on same path
+                else if(color[it] == color[node])return false;
+            }
+        }
+        return true;
+    }
+
+	bool isBipartite(int V, vector<int>adj[]){
+	    // Code here
+	    vector<int>color(V,-1);
+	    //components
+	    for(int i=0;i<V;i++){
+	        //if its not colored then color it
+	        if(color[i] == -1){
+	            if(check(i,adj,color) == false)return false;
+	        }
+	    }
+	    return true;
+	 }
+   
+   //DFS ALogorithm
+   
+       bool dfs(int src,int initial_col,vector<int> &color,vector<int> adj[]){
+        color[src] = initial_col;
+        for(auto it: adj[src]){
+            if(color[it] == -1){
+                if(dfs(it,!initial_col,color,adj)==false)return false;
+            }
+            else if(color[it] == initial_col)return false;
+        }
+        return true;
+    }
+
+	bool isBipartite(int V, vector<int>adj[]){
+	    // Code here
+	    vector<int> color(V,-1);
+	    int initial_col = 0;
+	    for(int i=0;i<V;i++){
+	        if(color[i] == -1){
+	            if(dfs(i,initial_col,color,adj) == false)return false;
+	        }
+	    }
+	    return true;
+	}
