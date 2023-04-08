@@ -1,0 +1,62 @@
+class Solution {
+public:
+    void bfs(int i,int j,int row,int col,vector<vector<char>> &grid){
+        queue<pair<int,int>>q;
+        q.push({i,j});
+        
+        while(!q.empty()){
+            int row_Ind = q.front().first;
+            int col_Ind = q.front().second;
+            q.pop();
+           //To traverse in all 8 direction  we are iterating loops    
+            for(int di=-1;di<=1;di++){
+                for(int dj=-1;dj<=1;dj++){
+                    int nx = di + row_Ind;
+                    int ny = dj + col_Ind;
+                    
+                    if(nx >= 0 && nx < row && ny >= 0 && ny < col && grid[nx][ny] == '1'){
+                        q.push({nx,ny});
+                        grid[nx][ny] = 2;
+                    } 
+                }
+            }
+        }
+    }
+    
+    //FOR IMPLEMENTING DFS 
+    /*
+        bool check(int i,int j,int row,int col,vector<vector<char>> &grid){
+        if(i>=0 && i<row && j>=0 && j<col && grid[i][j]=='1') return true;
+        
+        return false;
+    }
+    void dfs(int i,int j,int row,int col,vector<vector<char>> &grid){
+        grid[i][j] = '2';
+        for(int di = -1;di<=1;di++){
+            for(int dj = -1;dj<=1;dj++){
+                int nx = i+di;
+                int ny = j+dj;
+                if(check(nx,ny,row,col,grid)) dfs(nx,ny,row,col,grid);
+            }
+        }
+    }
+   */ 
+    
+    int numIslands(vector<vector<char>>& grid) {
+        // Code here
+        int row = grid.size();
+        int col = grid[0].size();
+        
+        int ans = 0;
+        
+        for(int i=0;i<row;i++){
+            for(int j=0;j<col;j++){
+                if(grid[i][j] == '1'){
+                    bfs(i,j,row,col,grid);
+                    ans++;
+                }
+            }
+        }
+        return ans;
+    }
+};
