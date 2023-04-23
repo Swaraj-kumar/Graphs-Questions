@@ -1,0 +1,57 @@
+we have to check whether there exist a path from source 1 to destination 2 
+we have, 3-> blank space, 2 -> destination , 1 -> source,  0 -> block
+eg:
+3 0 3 0 0 
+3 0 0 0 3 
+3 3 3 3 3 
+0 2 3 0 0 
+3 0 0 1 3 
+There is no path to reach at (3,1) i,e at 
+destination from (4,3) i,e source.
+
+
+
+class Solution
+{
+    public:
+    //Function to find whether a path exists from the source to destination.
+    bool is_Possible(vector<vector<int>>& grid) 
+    {
+        //code here
+        int row = grid.size();
+        int col = grid[0].size();
+        queue<pair<int,int>>q;
+        vector<vector<int>>vis(row,vector<int>(col,0));
+        
+        for(int i=0;i<row;i++){
+            for(int j=0;j<col;j++){
+                if(grid[i][j] == 1){
+                    q.push({i,j});
+                    vis[i][j] = 1;
+                }
+            }
+        }
+        
+        int dx[4] = {0,0,1,-1};
+        int dy[4] = {1,-1,0,0};
+        
+        while(!q.empty()){
+            int xx = q.front().first;
+            int yy = q.front().second;
+            q.pop();
+            
+            for(int i=0;i<4;i++){
+                int nx = xx + dx[i];
+                int ny = yy + dy[i];
+                
+                if(nx >= 0 && nx < row && ny >= 0 && ny < col && grid[nx][ny] != 0 && vis[nx][ny] != 1){
+                    if(grid[nx][ny] == 2)return true;
+                    
+                    q.push({nx,ny});
+                    vis[nx][ny] = 1;
+                }
+            }
+        }
+        return false;
+    }
+};
