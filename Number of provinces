@@ -1,0 +1,34 @@
+class Solution {
+  public:
+ void dfs(int node,vector<int> &vis,vector<int> list[]){
+      vis[node]=1;
+      for(auto it : list[node]){
+          if(!vis[it]){
+              dfs(it,vis,list);
+          }
+      }
+  }
+    int numProvinces(vector<vector<int>> adj, int V) {
+        // code here
+        //converting adjacency matrix to list
+        vector<int>list[V];
+        for(int i=0;i<adj.size();i++){
+            for(int j=0;j<adj[0].size();j++){
+                if(i!=j && adj[i][j]==1){
+                    list[i].push_back(j);
+                    list[j].push_back(i);
+                } 
+            }
+        }
+        //marking nodes as visited 
+        vector<int>vis(V,0);
+        int cnt=0;
+        for(int i=0;i<V;i++){
+            if(!vis[i]){
+                dfs(i,vis,list);
+                cnt++;
+            }
+        }
+        return cnt;
+    }
+};
