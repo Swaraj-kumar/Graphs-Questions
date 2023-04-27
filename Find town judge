@@ -1,15 +1,16 @@
 class Solution {
 public:
     int findJudge(int n, vector<vector<int>>& trust) {
-        vector<int>temp(n+1,0);
+        vector<int>res(n+1,0);
         for(auto it: trust){
-            temp[it[0]]--;//outdegree
-            temp[it[1]]++;//indegree
+            res[it[0]]--;//0th pos is outdegree so decrement
+            res[it[1]]++;//1st pos is indegree so increment
         }
         
-        for(int i=0;i<=n;i++){
-            if(temp[i] == n-1)return i;
+        for(int i=1;i<=n;i++){
+            if(res[i] == n-1)return i;
         }
         return -1;
+        
     }
 };
