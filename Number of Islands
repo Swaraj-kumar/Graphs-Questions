@@ -1,13 +1,67 @@
+// BFS 
+
+class Solution {
+public:
+    void bfs(int i, int j, int n, int m, vector<vector<int>>& vis, vector<vector<char>>& grid) {
+        queue<pair<int, int>> q;
+        q.push({i, j});
+        vis[i][j] = 1;
+
+        while (!q.empty()) {
+            int row = q.front().first;
+            int col = q.front().second;
+            q.pop();
+            //iterate in all four directions when its valid
+            for (int delRow = -1; delRow <= 1; delRow++) {
+                for (int delCol = -1; delCol <= 1; delCol++) {
+                    int nRow = row + delRow;
+                    int nCol = col + delCol;
+                    
+                    if (nRow >= 0 && nRow < n && nCol >= 0 && nCol < m &&
+                        grid[nRow][nCol] == '1' && !vis[nRow][nCol]) {
+                        vis[nRow][nCol] = 1;
+                        q.push({nRow, nCol});
+                    }
+                }
+            }
+        }
+    }
+
+    int numIslands(vector<vector<char>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+
+        //make replica 2D vis array and keep marking it
+        vector<vector<int>> vis(n, vector<int>(m, 0));
+        int count = 0;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == '1' && !vis[i][j]) {
+                    count++;
+                    bfs(i, j, n, m, vis, grid);
+                }
+            }
+        }
+        return count;
+    }
+};
+
+
+
+//DFS
+
 class Solution {
 public:
     bool isValid(int i,int j,int row,int col,vector<vector<char>> &grid){
-        if(i < 0 || i >= row || j < 0 || j >= col || grid[i][j] != '1')return true;
+        if(i < 0 || i >= row || j < 0 || j >= col || grid[i][j] == '0')return true;
         return false;
     }
     
     void dfs(int i,int j,int row,int col,vector<vector<char>> &grid){
+        //if any of the above condition terms to be false we recursively return from there and do not perform anything
         if(isValid(i,j,row,col,grid))return;
-        
+        //else we mark it and iterate in other 4 directions
         grid[i][j] = '2';
         
         dfs(i,j+1,row,col,grid);
