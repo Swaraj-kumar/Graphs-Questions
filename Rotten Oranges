@@ -1,19 +1,22 @@
+// Keep a count of fresh oranges when fresh oranges are rottened return time else return -1 if not possible
 
-Approach: count for the fresh oranges keep running the loop till we find fresh oranges  if ata last fresh oranges will be tending towards zero then return time 
 
 class Solution {
-public:
+public:    
     int orangesRotting(vector<vector<int>>& grid) {
-        int row = grid.size();
-        int col = grid[0].size();
+        int n = grid.size();
+        int m = grid[0].size();
         queue<pair<int,int>>q;
         int fresh = 0;
-        for(int i=0;i<row;i++){
-            for(int j=0;j<col;j++){
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
                 if(grid[i][j] == 2)q.push({i,j});
                 if(grid[i][j] == 1)fresh++;
             }
         }
+        //ek baar me 3-4 grid pe rotten mila toh uske aas pas ka sara grid rotten bna doh ek bfs call pe
+        //aur dushri bfs call pr uske aas pas wali grids ko rotten bana doh
         
         int time = 0;
         while(fresh!= 0 && !q.empty()){
@@ -31,7 +34,7 @@ public:
                     int nx = xx + dx[i];
                     int ny = yy + dy[i];
                     
-                    if(nx >= 0 && nx < row && ny >= 0 && ny < col && grid[nx][ny] == 1){
+                    if(nx >= 0 && nx < n && ny >= 0 && ny < m && grid[nx][ny] == 1){
                         grid[nx][ny] = 2;
                         fresh--;
                         q.push({nx,ny});
@@ -39,6 +42,7 @@ public:
                 }
             }
         }
-        return fresh == 0 ? time : -1;
+        if(fresh == 0)return time;
+        return -1;
     }
 };
