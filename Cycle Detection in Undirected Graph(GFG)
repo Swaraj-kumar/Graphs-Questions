@@ -1,40 +1,45 @@
     
     //BFS APPROACH
     
-    bool bfs(int src,vector<int> &vis,vector<int> adj[]){
-        vis[src] = 1;
+class Solution {
+  public:
+//   ek queue lelo jisme current element aur uske parent ko push kro initially phir iterate 
+// krte jao uske ajacent nodes tk aur agar woh visited nhi hai tavi iteration hongi nhi toh
+// else me jake check krlo jb woh visited hogi ki uska parent kya current element ke
+// barabar toh nhi agar hongi toh return true mtlb loop ni hai 
+   bool fun(int node,vector<int> &vis,vector<int> adj[]){
         queue<pair<int,int>>q;
-        q.push({src,-1});
+        q.push({node,-1});
+        vis[node] = 1;
         
         while(!q.empty()){
-            int node = q.front().first;
+            int temp = q.front().first;
             int par = q.front().second;
             q.pop();
             
-            for(auto it: adj[node]){
+            for(auto it: adj[temp]){
                 if(!vis[it]){
-                q.push({it,node});
-                vis[it] = 1;
+                    q.push({it,temp});
+                    vis[it] = 1;
                 }
-                else if(par != it)return true;
+                 else if(it != par)return true;
             }
         }
         return false;
-    }
-    
-    
+   }
+  
+    // Function to detect cycle in an undirected graph.
     bool isCycle(int V, vector<int> adj[]) {
         // Code here
         vector<int>vis(V,0);
         for(int i=0;i<V;i++){
             if(!vis[i]){
-                if(bfs(i,vis,adj))return true;
+                if(fun(i,vis,adj) == true)return true;
             }
         }
         return false;
     }
-    
-    
+};
     //DFS APPROACH
     
         bool dfs(int node,int par,vector<int> &vis,vector<int> adj[]){
