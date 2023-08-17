@@ -1,0 +1,50 @@
+https://leetcode.com/problems/01-matrix/
+
+// ek queue lo jo distance store krta rahe sath sath 
+// ek visited array lo aur jaha v 0 mile mat me vis me jake 0 mark krdo nhi toh 1 mark krdo aur sath sath
+// queue me push krte jao jaha v 0 tha initially phir queue ko iterate kro 
+
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
+        int n = mat.size();
+        int m = mat[0].size();
+        
+        vector<vector<int>>vis(n,vector<int>(m,0));
+        queue<pair<pair<int,int>,int>>q;
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(mat[i][j] == 0){
+                    vis[i][j] = 0;
+                    q.push({{i,j},0});
+                }
+                else vis[i][j] = 1;
+            }
+        }
+        
+        	while(!q.empty()){
+	        int row = q.front().first.first;
+	        int col = q.front().first.second;
+	        int steps = q.front().second;
+	        q.pop();
+	        // haar grid k row col ko steps me badal do
+	        mat[row][col] = steps;
+	        
+	        int dx[4] = {-1,0,1,0};
+	        int dy[4] = {0,1,0,-1};
+	        
+	        for(int i=0;i<4;i++){
+	            int nx = row + dx[i];
+	            int ny = col + dy[i];
+	            
+	            if(nx >=0 && nx < n && ny  >= 0 && ny < m && vis[nx][ny] == 1){
+	                q.push({{nx,ny},steps+1});
+	                vis[nx][ny] = 0;
+	            }
+	        }
+	        
+	    }
+        return mat;
+    }
+};
