@@ -1,0 +1,93 @@
+https://practice.geeksforgeeks.org/problems/number-of-distinct-islands/1
+
+//DFS
+
+class Solution {
+  public:
+    void dfs(int i,int j,int n,int m,vector<vector<int>> &vis,vector<vector<int>>& grid,
+    vector<pair<int,int>> &temp,int basei,int basej){
+        vis[i][j] = 1;
+        temp.push_back({i-basei,j-basej});
+        int dx[4] = {-1, 0, +1, 0};
+        int dy[4] = {0, 1, 0, -1}; 
+        
+        for(int k=0;k<4;k++){
+            int nx = i + dx[k];
+            int ny = j + dy[k];
+            
+            if(nx >= 0 && nx < n && ny >= 0 && ny < m && !vis[nx][ny] && grid[nx][ny] == 1){
+                dfs(nx,ny,n,m,vis,grid,temp,basei,basej);
+            }
+        }
+    }
+    //current cordinate se intial cordinate ko minus kro 
+  
+    int countDistinctIslands(vector<vector<int>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+        vector<vector<int>>vis(n,vector<int>(m,0));
+        //set me 2D array ka pair dalo
+        set<vector<pair<int,int>>>st;
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(!vis[i][j] && grid[i][j] == 1){
+                    vector<pair<int,int>>temp;
+                    dfs(i,j,n,m,vis,grid,temp,i,j);
+                    st.insert(temp);
+                }
+            }
+        }
+        return st.size();
+    }
+};
+
+
+// BFS
+
+void bfs(int rr,int cc,int br,int bc,vector<pair<int,int>> &v,vector<vector<int>>& vis,vector<vector<int>>& grid)
+    {
+        vis[rr][cc]=1;
+        int drow[4]={-1,0,1,0};
+        int dcol[4]={0,1,0,-1};
+        queue<pair<int,int>> q;
+        q.push({rr,cc});
+        while(!q.empty())
+        {
+            int r=q.front().first;
+            int c=q.front().second;
+            q.pop();
+            v.push_back({r-br,c-bc});
+        for(int i=0;i<4;i++)
+        {
+            int nr=r+drow[i];
+            int nc=c+dcol[i];
+            if(nr>=0 && nr<grid.size() and nc>=0 and nc<grid[0].size() and grid[nr][nc]==1 and !vis[nr][nc])
+            {
+                q.push({nr,nc});
+                vis[nr][nc]=1;
+            }
+        }
+        }
+        
+    }
+    int countDistinctIslands(vector<vector<int>>& grid) {
+        // code here
+        int n=grid.size();
+        int m=grid[0].size();
+        vector<vector<int>> vis(n,vector<int> (m,0));
+        set<vector<pair<int,int>>> s;
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                if(grid[i][j]==1 and !vis[i][j])
+                {
+                    vector<pair<int,int>> v;
+                    bfs(i,j,i,j,v,vis,grid);
+                    s.insert(v);
+                }
+            }
+        }
+        return s.size();
+    }
