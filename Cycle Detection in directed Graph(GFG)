@@ -1,24 +1,33 @@
-    bool dfs(int node,vector<int> &vis1,vector<int> &vis2,vector<int> adj[]){
-        vis1[node] = 1;
-        vis2[node] = 1;
-        
-        for(auto it : adj[node]){
-            if(!vis1[it]){
-                if(dfs(it,vis1,vis2,adj)==true)return true;
+class Solution {
+  public:
+    bool dfs(int node,vector<int> &vis, vector<int> &dfsVis,vector<int> adj[]){
+        vis[node] = 1;
+        dfsVis[node] = 1;
+        //traverse for adjacent nodes
+        for(auto it: adj[node]){
+            //when node is not visited visit it
+            if(!vis[it]){
+            if(dfs(it,vis,dfsVis,adj) == true)return true;
             }
-            else if(vis2[it] == 1)return true;
+            //if the node has been previously visited but it has to be on same path
+            else if(dfsVis[it])return true;
         }
-        vis2[node] = 0;
+        //while returning mark again as 0
+        dfsVis[node] = 0;
         return false;
     }
-    
+  
+    // Function to detect cycle in a directed graph.
     bool isCyclic(int V, vector<int> adj[]) {
         // code here
-         vector<int>vis1(V,0),vis2(V,0);
-         for(int i=0;i<V;i++){
-             if(!vis1[i]){
-                 if(dfs(i,vis1,vis2,adj)==true)return true;
-             }
-         }
-         return false;
+        vector<int>vis(V,0);
+        vector<int>dfsVis(V,0);
+        
+        for(int i=0;i<V;i++){
+            if(!vis[i]){
+                if(dfs(i,vis,dfsVis,adj)==true)return true;
+            }
+        }
+        return false;
     }
+};
